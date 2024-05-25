@@ -1,27 +1,70 @@
-# Grid-Game
-This is a React-based game where players hover over cards to change their color while avoiding bomb cards. The game includes different difficulty levels and tracks the time taken to complete the game.
+# Getting Started with Create React App
 
-## Features
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-- **Difficulty Levels**: Choose between Easy, Medium, and Difficult modes.
-  - Easy: 16 cards, 2 bomb cards.
-  - Medium: 50 cards, 5 bomb cards.
-  - Difficult: 100 cards, 10 bomb cards.
-- **Interactive Grid**: Hover over cards to turn them blue. Avoid bomb cards, which are red.
-- **Timer**: Tracks the time taken to complete the game.
-- **Victory and Defeat**: Displays "Victory" when all non-bomb cards are hovered over. Displays "Defeat" if a bomb card is hovered over.
-- **Reset Functionality**: Allows players to reset the game and choose the difficulty level again.
+## Available Scripts
 
-## How to Play
+In the project directory, you can run:
 
-1. **Select Difficulty**: Choose the game mode (Easy, Medium, or Difficult) from the dropdown menu.
-2. **Start the Game**: Click the "Start" button to begin the game. Bomb cards will be revealed in red.
-3. **Hover over Cards**: Move your mouse over the cards to turn them blue.
-   - **Avoid Bombs**: Bomb cards are red and will end the game if hovered over.
-4. **Victory**: Hover over all non-bomb cards to win the game. The timer will stop, and "Victory" will be displayed along with the time taken.
-5. **Defeat**: Hovering over a bomb card will end the game and display "Defeat" along with the time taken.
-6. **Reset**: Click the "Reset" button to restart the game and choose a new difficulty.
+### `npm start`
 
-## License
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-This project is licensed under the MIT License.
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
+
+### `npm test`
+
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run build`
+
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
+
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
+
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### `npm run eject`
+
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+### Code Splitting
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+
+### Analyzing the Bundle Size
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

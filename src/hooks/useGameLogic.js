@@ -26,6 +26,22 @@ const useGameLogic = () => {
   const [bombIndices, setBombIndices] = useState([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameEnded, setGameEnded] = useState(false);
+  const [leaderboard, setLeaderboard] = useState({
+    Easy: [],
+    Medium: [],
+    Difficult: [],
+  });
+
+  useEffect(() => {
+    const storedLeaderboard = localStorage.getItem("leaderboard");
+    if (storedLeaderboard) {
+      setLeaderboard(JSON.parse(storedLeaderboard));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  }, [leaderboard]);
 
   const handleHover = (isBomb) => {
     if (gameEnded) return;
@@ -99,10 +115,21 @@ const useGameLogic = () => {
 
   useEffect(() => {
     if (hoverCount === totalSquares - bombCounts[difficulty] - 1) {
-      setElapsedTime((Date.now() - startTime) / 1000);
+      const endTime = (Date.now() - startTime) / 1000;
+      setElapsedTime(endTime);
       setGameEnded(true);
+      updateLeaderboard(difficulty, endTime);
     }
   }, [hoverCount, totalSquares, bombCounts, difficulty, startTime]);
+
+  const updateLeaderboard = (difficulty, time) => {
+    setLeaderboard((prevLeaderboard) => {
+      const updatedTimes = [...prevLeaderboard[difficulty], time]
+        .sort((a, b) => a - b)
+        .slice(0, 3);
+      return { ...prevLeaderboard, [difficulty]: updatedTimes };
+    });
+  };
 
   return {
     hoverCount,
@@ -121,6 +148,7 @@ const useGameLogic = () => {
     handleDifficultyChange,
     handleStartClick,
     handleReset,
+    leaderboard,
     bombCounts, // Export bombCounts to be used in App.js
   };
 };

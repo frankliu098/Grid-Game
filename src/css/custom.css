@@ -1,0 +1,42 @@
+/* src/css/custom.css */
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+
+.pixel-font {
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.bg-brown-100 {
+  background-color: #eae0c8;
+}
+
+.bg-brown-200 {
+  background-color: #c8b498;
+}
+
+.bg-brown-400 {
+  background-color: #8b6f47;
+}
+
+.text-brown-800 {
+  color: #5a4633;
+}
+
+.border-brown-800 {
+  border-color: #5a4633;
+}
+
+.focus:ring-brown-500 {
+  --tw-ring-color: #9e7f50;
+}
+
+.grid-container {
+  display: grid;
+  gap: 10px;
+  margin: auto;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,6 +1,6 @@
 import "./css/App.css";
 import "./css/custom.css";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Grid from "./components/Grid";
 import Leaderboard from "./components/Leaderboard";
 import useGameLogic from "./hooks/useGameLogic";
@@ -42,7 +42,6 @@ function App() {
     resetKey,
     isHoverEnabled,
     startIndex,
-    elapsedTime,
     isDefeated,
     bombIndices,
     gameStarted,
@@ -56,82 +55,94 @@ function App() {
     bombCounts,
   } = useGameLogic();
 
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  useEffect(() => {
+    let interval = null;
+    if (gameStarted && !gameEnded) {
+      interval = setInterval(() => {
+        setElapsedTime((prevTime) => prevTime + 0.1);
+      }, 100);
+    } else if (gameEnded) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [gameStarted, gameEnded]);
+
+  const handleStartClickWrapper = () => {
+    setElapsedTime(0);
+    handleStartClick();
+  };
+
+  const handleResetWrapper = () => {
+    setElapsedTime(0);
+    handleReset();
+  };
+
   return (
     <AuthProvider>
-      <div className="App bg-brown-100 min-h-screen flex flex-col items-center justify-center">
-        <header className="App-header">
-          <ProtectedRoute>
-            <div className="flex flex-col items-center">
-              <label
-                htmlFor="difficulty"
-                className="mb-2 text-lg pixel-font text-brown-800"
-              >
-                Select Difficulty:
-              </label>
-              <select
-                id="difficulty"
-                value={difficulty}
-                onChange={(e) => handleDifficultyChange(e.target.value)}
-                className="mb-4 px-4 py-2 border-2 border-brown-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown-500 pixel-font"
-              >
-                <option value="">Select</option>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Difficult">Difficult</option>
-              </select>
-              {difficulty && (
-                <div className="flex flex-row items-start mt-4">
-                  <Grid
-                    totalSquares={totalSquares}
-                    handleHover={handleHover}
-                    isHoverEnabled={isHoverEnabled}
-                    startIndex={startIndex}
-                    handleStartClick={handleStartClick}
-                    resetKey={resetKey}
-                    bombIndices={bombIndices}
-                    handleBombHover={handleBombHover}
-                    gameStarted={gameStarted}
-                    gameEnded={gameEnded}
-                  />
-                  {/* <Leaderboard times={leaderboard[difficulty]} /> */}
-                </div>
-              )}
-              {hoverCount === totalSquares - bombCounts[difficulty] - 1 &&
-                !isDefeated && (
-                  <>
-                    <p className="text-2xl text-green-500 mt-4 pixel-font">
-                      Victory!
-                    </p>
-                    {elapsedTime && (
-                      <p className="text-lg text-white pixel-font">
-                        Time: {elapsedTime.toFixed(2)} seconds
-                      </p>
-                    )}
-                  </>
-                )}
-              {isDefeated && (
-                <>
-                  <p className="text-2xl text-red-500 mt-4 pixel-font">
-                    Defeat!
-                  </p>
-                  {elapsedTime && (
-                    <p className="text-lg text-white pixel-font">
-                      Time: {elapsedTime.toFixed(2)} seconds
-                    </p>
-                  )}
-                </>
-              )}
-              {difficulty && (
-                <button
-                  onClick={handleReset}
-                  className="mt-4 px-6 py-3 bg-blue-700 text-white rounded-lg border-2 border-brown-800 hover:bg-blue-900 transition-colors duration-200 pixel-font"
+      <div className="App bg-brown-100 min-h-screen flex flex-row items-center justify-center">
+        {/* <Leaderboard times={leaderboard[difficulty] || []} /> */}
+        <div className="flex flex-col items-center justify-center">
+          <header className="App-header p-8 border-4 border-brown-800 rounded-lg shadow-lg bg-brown-200">
+            <ProtectedRoute>
+              <div className="flex flex-col items-center">
+                <label
+                  htmlFor="difficulty"
+                  className="mb-2 text-lg pixel-font text-brown-800"
                 >
-                  Reset
-                </button>
-              )}
-            </div>
-          </ProtectedRoute>
-        </header>
+                  Select Difficulty:
+                </label>
+                <select
+                  id="difficulty"
+                  value={difficulty}
+                  onChange={(e) => handleDifficultyChange(e.target.value)}
+                  className="mb-4 px-4 py-2 border-2 border-brown-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brown-500 pixel-font"
+                >
+                  <option value="">Select</option>
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Difficult">Difficult</option>
+                </select>
+                {difficulty && (
+                  <div className="flex flex-row items-start mt-4">
+                    <Grid
+                      totalSquares={totalSquares}
+                      handleHover={handleHover}
+                      isHoverEnabled={isHoverEnabled}
+                      startIndex={startIndex}
+                      handleStartClick={handleStartClickWrapper}
+                      resetKey={resetKey}
+                      bombIndices={bombIndices}
+                      handleBombHover={handleBombHover}
+                      gameStarted={gameStarted}
+                      gameEnded={gameEnded}
+                    />
+                    {/* <Leaderboard times={leaderboard[difficulty]} /> */}
+                  </div>
+                )}
+                <div className="mt-4 text-center pixel-font">
+                  <p className="text-2xl">
+                    {gameEnded
+                      ? hoverCount === totalSquares - bombCounts[difficulty] - 1
+                        ? "Victory!"
+                        : "Defeat!"
+                      : "Game in Progress"}
+                  </p>
+                  <p className="text-lg">{elapsedTime.toFixed(1)} seconds</p>
+                  {difficulty && (
+                    <button
+                      onClick={handleResetWrapper}
+                      className="mt-4 px-6 py-3 bg-purple-700 text-white rounded-lg border-2 border-brown-800 hover:bg-purple-900 transition-colors duration-200 pixel-font"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+              </div>
+            </ProtectedRoute>
+          </header>
+        </div>
       </div>
     </AuthProvider>
   );

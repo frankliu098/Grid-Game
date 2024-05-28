@@ -4,7 +4,7 @@ const Leaderboard = ({ times }) => {
   return (
     <div className="leaderboard pixel-font p-4 border-4 border-brown-800 rounded-lg shadow-lg bg-brown-200 mr-8">
       <h3 className="text-2xl mb-4 text-center text-brown-800">Leaderboard</h3>
-      <ul className="list-none p-0">
+      {/* <ul className="list-none p-0">
         {times.map((time, index) => (
           <li
             key={index}
@@ -13,7 +13,7 @@ const Leaderboard = ({ times }) => {
             {index + 1}. {time.toFixed(2)} seconds
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };

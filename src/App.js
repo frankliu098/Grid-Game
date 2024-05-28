@@ -81,8 +81,8 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="App bg-brown-100 min-h-screen flex flex-row items-center justify-center">
-        {/* <Leaderboard times={leaderboard[difficulty] || []} /> */}
+      <div className="App bg-brown-100 min-h-screen flex flex-row items-start justify-center">
+        {/* <Leaderboard scores={leaderboard[difficulty] || []} /> */}
         <div className="flex flex-col items-center justify-center">
           <header className="App-header p-8 border-4 border-brown-800 rounded-lg shadow-lg bg-brown-200">
             <ProtectedRoute>
@@ -118,7 +118,6 @@ function App() {
                       gameStarted={gameStarted}
                       gameEnded={gameEnded}
                     />
-                    {/* <Leaderboard times={leaderboard[difficulty]} /> */}
                   </div>
                 )}
                 <div className="mt-4 text-center pixel-font">

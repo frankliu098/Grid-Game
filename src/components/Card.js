@@ -11,43 +11,85 @@ const Card = ({
   size,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+  const [isPermanentlyHovered, setIsPermanentlyHovered] = useState(false);
 
   const handleMouseEnter = () => {
-    if (isHoverEnabled && !isHovered && !isStart && !gameEnded) {
+    if (isHoverEnabled && !isStart && !gameEnded) {
       setIsHovered(true);
-      if (isBomb) {
-        onHover(true); // Indicate it's a bomb
-      } else {
-        onHover(false); // Not a bomb
+      if (!isPermanentlyHovered) {
+        setIsPermanentlyHovered(true);
+        if (isBomb) {
+          onHover(true); // Indicate it's a bomb
+        } else {
+          onHover(false); // Not a bomb
+        }
       }
     }
   };
 
-  const handleStartClick = () => {
-    onStartClick();
-    setIsPressed(true);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
+
+  const handleMouseClick = () => {
+    setIsClicked(true);
+    if (isStart) {
+      onStartClick();
+    }
+  };
+
+  const cardClasses = `w-40 h-16 m-1 cursor-pointer select-none transition-all duration-150 border-blue-300 border-b-[1px] rounded-lg`;
+
+  const boxShadow = isPermanentlyHovered
+    ? "translate-y-2 shadow-none border-b-0"
+    : "[box-shadow:0_8px_0_0_#1b6ff8,0_12px_0_0_#1b70f841]";
+
+  const bombBoxShadow =
+    gameStarted && isBomb
+      ? isPermanentlyHovered
+        ? "translate-y-2 shadow-none border-b-0"
+        : "[box-shadow:0_8px_0_0_#dc3545,0_12px_0_0_#dc354566] border-red-300"
+      : "";
+
+  if (isStart) {
+    return (
+      <button
+        className={`${cardClasses} bg-green-500 text-white pixel-font ${
+          isClicked
+            ? "translate-y-2 shadow-none border-b-0"
+            : "[box-shadow:0_8px_0_0_#28a745,0_12px_0_0_#28a74566]"
+        } border-green-300`}
+        onClick={handleMouseClick}
+        style={{
+          ...size,
+        }}
+      >
+        Start
+      </button>
+    );
+  }
 
   return (
     <div
-      className={`card border-2 border-brown-800 m-1 transition-colors duration-300 rounded-lg ${
-        isHovered ? (isBomb ? "bg-red-500" : "bg-blue-500") : ""
-      } ${gameStarted && isBomb ? "bg-red-500" : ""}`}
-      style={size}
+      className={`${cardClasses} ${
+        gameStarted
+          ? isBomb
+            ? isHovered || isPermanentlyHovered
+              ? "bg-red-900"
+              : "bg-red-400"
+            : isHovered || isPermanentlyHovered
+            ? "bg-blue-900"
+            : "bg-blue-450"
+          : "bg-blue-450"
+      } ${boxShadow} ${bombBoxShadow}`}
+      style={{
+        ...size,
+      }}
       onMouseEnter={handleMouseEnter}
-      onClick={isStart ? handleStartClick : null}
-    >
-      {isStart && (
-        <button
-          className={`w-full h-full bg-green-500 text-white pixel-font rounded-lg border-2 border-brown-800 transition-transform duration-200  ${
-            isPressed ? "transform scale-95" : ""
-          }`}
-        >
-          Start
-        </button>
-      )}
-    </div>
+      onMouseLeave={handleMouseLeave}
+      onClick={handleMouseClick}
+    ></div>
   );
 };
 

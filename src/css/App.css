@@ -1,0 +1,14 @@
+/* src/css/App.css */
+
+.grid-container {
+  display: grid;
+  gap: 10px;
+  width: fit-content;
+  margin: auto;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

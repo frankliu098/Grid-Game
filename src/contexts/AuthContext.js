@@ -10,9 +10,12 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/checkAuth", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "http://localhost:4000/api/auth/checkAuth",
+          {
+            withCredentials: true,
+          }
+        );
         setUser(response.data);
       } catch (error) {
         setUser(null);
@@ -27,28 +30,46 @@ export const AuthProvider = ({ children }) => {
     if (!username || !password) {
       throw new Error("Username and password are required");
     }
-    await axios.post("http://localhost:4000/signup", { username, password });
+    try {
+      await axios.post("http://localhost:4000/api/auth/signup", {
+        username,
+        password,
+      });
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Error signing up");
+    }
   };
 
   const login = async (username, password) => {
-    await axios.post(
-      "http://localhost:4000/login",
-      { username, password },
-      { withCredentials: true }
-    );
-    const response = await axios.get("http://localhost:4000/checkAuth", {
-      withCredentials: true,
-    });
-    setUser(response.data);
+    try {
+      await axios.post(
+        "http://localhost:4000/api/auth/login",
+        { username, password },
+        { withCredentials: true }
+      );
+      const response = await axios.get(
+        "http://localhost:4000/api/auth/checkAuth",
+        {
+          withCredentials: true,
+        }
+      );
+      setUser(response.data);
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Error logging in");
+    }
   };
 
   const logout = async () => {
-    await axios.post(
-      "http://localhost:4000/logout",
-      {},
-      { withCredentials: true }
-    );
-    setUser(null);
+    try {
+      await axios.post(
+        "http://localhost:4000/api/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+      setUser(null);
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Error logging out");
+    }
   };
 
   return (

@@ -40,3 +40,11 @@
   justify-content: center;
   align-items: center;
 }
+
+body {
+  cursor: pointer; /* Changes the cursor to a pointer */
+}
+
+.custom-cursor {
+  cursor: crosshair; /* Changes the cursor to a crosshair */
+}

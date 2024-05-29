@@ -7,6 +7,7 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,6 +29,10 @@ const Auth = () => {
     try {
       if (username && password) {
         await signup(username, password);
+        setIsLogin(true);
+        setSuccessMessage(
+          "Sign up successful! Please log in with your new credentials."
+        );
       } else {
         setError("Username and password are required");
       }
@@ -39,6 +44,7 @@ const Auth = () => {
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
     setError(""); // Clear previous errors when toggling mode
+    setSuccessMessage(""); // Clear success message when toggling mode
   };
 
   return (
@@ -48,6 +54,9 @@ const Auth = () => {
           {isLogin ? "Login" : "Sign Up"}
         </h2>
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+        {successMessage && (
+          <p className="text-green-500 mb-4 text-center">{successMessage}</p>
+        )}
         <form onSubmit={isLogin ? handleLogin : handleSignup}>
           <div className="mb-4">
             <label

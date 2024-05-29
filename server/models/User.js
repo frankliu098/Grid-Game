@@ -6,6 +6,11 @@ const SALT_WORK_FACTOR = 10;
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  fastestScores: {
+    easy: { type: Number, default: null }, // Store times in seconds
+    medium: { type: Number, default: null },
+    difficult: { type: Number, default: null },
+  },
 });
 
 // Hash the password before saving the user model

@@ -1,5 +1,22 @@
 // src/hooks/useGameLogic.js
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../contexts/AuthContext";
+
+// Function to fetch the leaderboard data
+const fetchLeaderboard = async (difficulty, setLeaderboard) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:4000/api/leaderboard/${difficulty}`
+    );
+    setLeaderboard((prevLeaderboard) => ({
+      ...prevLeaderboard,
+      [difficulty]: response.data,
+    }));
+  } catch (error) {
+    console.error("Error fetching leaderboard", error);
+  }
+};
 
 const difficulties = {
   Easy: 16,
@@ -14,6 +31,7 @@ const bombCounts = {
 };
 
 const useGameLogic = () => {
+  // const { user } = useContext(AuthContext);
   const [hoverCount, setHoverCount] = useState(0);
   const [difficulty, setDifficulty] = useState("");
   const [totalSquares, setTotalSquares] = useState(0);
@@ -32,16 +50,35 @@ const useGameLogic = () => {
     Difficult: [],
   });
 
+  // Fetch leaderboard when difficulty changes
   useEffect(() => {
-    const storedLeaderboard = localStorage.getItem("leaderboard");
-    if (storedLeaderboard) {
-      setLeaderboard(JSON.parse(storedLeaderboard));
+    if (difficulty) {
+      fetchLeaderboard(difficulty, setLeaderboard);
     }
-  }, []);
+  }, [difficulty]);
 
-  useEffect(() => {
-    localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-  }, [leaderboard]);
+  const updateLeaderboard = async (difficulty, time) => {
+    try {
+      await axios.post(
+        "http://localhost:4000/api/updateScore",
+        { difficulty, time },
+        { withCredentials: true }
+      );
+
+      // Refetch the leaderboard data after updating the score
+      const response = await axios.get(
+        `http://localhost:4000/api/leaderboard/${difficulty}`
+      );
+      const leaderboardData = response.data;
+
+      setLeaderboard((prevLeaderboard) => ({
+        ...prevLeaderboard,
+        [difficulty]: leaderboardData,
+      }));
+    } catch (error) {
+      console.error("Error updating leaderboard", error);
+    }
+  };
 
   const handleHover = (isBomb) => {
     if (gameEnded) return;
@@ -113,22 +150,29 @@ const useGameLogic = () => {
     setGameEnded(false);
   };
 
+  // Update the useEffect to ensure it calls updateLeaderboard asynchronously
   useEffect(() => {
     if (hoverCount === totalSquares - bombCounts[difficulty] - 1) {
       const endTime = (Date.now() - startTime) / 1000;
       setElapsedTime(endTime);
       setGameEnded(true);
-      updateLeaderboard(difficulty, endTime);
+      if (!isDefeated) {
+        updateUserFastestScore(difficulty.toLowerCase(), endTime);
+        updateLeaderboard(difficulty.toLowerCase(), endTime);
+      }
     }
-  }, [hoverCount, totalSquares, bombCounts, difficulty, startTime]);
+  }, [hoverCount, totalSquares, difficulty, startTime, isDefeated]);
 
-  const updateLeaderboard = (difficulty, time) => {
-    setLeaderboard((prevLeaderboard) => {
-      const updatedTimes = [...prevLeaderboard[difficulty], time]
-        .sort((a, b) => a - b)
-        .slice(0, 3);
-      return { ...prevLeaderboard, [difficulty]: updatedTimes };
-    });
+  const updateUserFastestScore = async (mode, time) => {
+    try {
+      await axios.post(
+        "http://localhost:4000/api/updateScore",
+        { mode, time },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("Error updating user fastest score:", error);
+    }
   };
 
   return {

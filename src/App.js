@@ -61,8 +61,8 @@ function App() {
     let interval = null;
     if (gameStarted && !gameEnded) {
       interval = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 0.1);
-      }, 100);
+        setElapsedTime((prevTime) => prevTime + 0.01);
+      }, 10);
     } else if (gameEnded) {
       clearInterval(interval);
     }
@@ -81,7 +81,10 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="App bg-brown-100 min-h-screen flex items-center justify-center">
+      <div className="App bg-brown-100 min-h-screen flex items-center justify-center relative">
+        <div className="absolute left-96">
+          <Leaderboard difficulty={difficulty} leaderboard={leaderboard} />{" "}
+        </div>
         <div className="flex flex-col items-center justify-center">
           <header className="App-header p-8 border-4 border-brown-800 rounded-lg shadow-lg bg-brown-200">
             <ProtectedRoute>
@@ -127,7 +130,7 @@ function App() {
                         : "Defeat!"
                       : "Game in Progress"}
                   </p>
-                  <p className="text-lg">{elapsedTime.toFixed(1)} seconds</p>
+                  <p className="text-lg">{elapsedTime.toFixed(2)} seconds</p>
                   {difficulty && (
                     <button
                       onClick={handleResetWrapper}

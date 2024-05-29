@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const Leaderboard = require("./models/Leaderboard"); // Add this line to import the Leaderboard model
 
 const User = require("./models/User");
 
@@ -91,6 +92,68 @@ const authenticate = (req, res, next) => {
     res.status(401).send({ message: "Invalid token", error: error.message });
   }
 };
+
+app.post("/api/updateScore", authenticate, async (req, res) => {
+  const { difficulty, time } = req.body;
+  if (!difficulty || !time) {
+    return res
+      .status(400)
+      .send({ message: "Difficulty and time are required" });
+  }
+
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    if (
+      !user.fastestScores[difficulty] ||
+      time < user.fastestScores[difficulty]
+    ) {
+      user.fastestScores[difficulty] = time;
+      await user.save();
+
+      await Leaderboard.findOneAndUpdate(
+        { username: user.username, difficulty },
+        { score: time },
+        { upsert: true, new: true }
+      );
+    }
+
+    res.send({ message: "Score updated", fastestScores: user.fastestScores });
+  } catch (error) {
+    console.error("Error updating score", error);
+    res
+      .status(500)
+      .send({ message: "Error updating score", error: error.message });
+  }
+});
+
+app.get("/api/leaderboard/:difficulty", async (req, res) => {
+  const { difficulty } = req.params;
+  const difficultyKey = difficulty.toLowerCase(); // Convert difficulty to lowercase to match the field names
+  try {
+    const users = await User.find(
+      { [`fastestScores.${difficultyKey}`]: { $exists: true, $ne: null } }, // Ensure the field exists and is not null
+      { username: 1, [`fastestScores.${difficultyKey}`]: 1 }
+    )
+      .sort({ [`fastestScores.${difficultyKey}`]: 1 })
+      .limit(3);
+
+    const leaderboard = users.map((user) => ({
+      username: user.username,
+      score: user.fastestScores[difficultyKey],
+    }));
+
+    res.send(leaderboard);
+  } catch (error) {
+    console.error("Error fetching leaderboard", error);
+    res
+      .status(500)
+      .send({ message: "Error fetching leaderboard", error: error.message });
+  }
+});
 
 app.get("/api/auth/checkAuth", authenticate, (req, res) => {
   res.send(req.user);

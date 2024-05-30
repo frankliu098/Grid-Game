@@ -139,7 +139,7 @@ app.get("/api/leaderboard/:difficulty", async (req, res) => {
       { username: 1, [`fastestScores.${difficultyKey}`]: 1 }
     )
       .sort({ [`fastestScores.${difficultyKey}`]: 1 })
-      .limit(3);
+      .limit(5);
 
     const leaderboard = users.map((user) => ({
       username: user.username,

@@ -18,10 +18,10 @@ const Grid = ({
         gridTemplateColumns: "repeat(4, 1fr)",
         gridTemplateRows: "repeat(4, 1fr)",
       };
-    } else if (totalSquares === 50) {
+    } else if (totalSquares === 49) {
       return {
-        gridTemplateColumns: "repeat(10, 1fr)",
-        gridTemplateRows: "repeat(5, 1fr)",
+        gridTemplateColumns: "repeat(7, 1fr)",
+        gridTemplateRows: "repeat(7, 1fr)",
       };
     } else if (totalSquares === 100) {
       return {
@@ -37,7 +37,7 @@ const Grid = ({
         width: "100px",
         height: "100px",
       };
-    } else if (totalSquares === 50) {
+    } else if (totalSquares === 49) {
       return {
         width: "60px",
         height: "60px",

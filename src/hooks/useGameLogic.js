@@ -20,7 +20,7 @@ const fetchLeaderboard = async (difficulty, setLeaderboard) => {
 
 const difficulties = {
   Easy: 16,
-  Medium: 50,
+  Medium: 49,
   Difficult: 100,
 };
 

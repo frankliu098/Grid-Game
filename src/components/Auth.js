@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import MusicToggle from "./MusicToggle";
 
 const Auth = () => {
   const { login, signup } = useContext(AuthContext);
@@ -7,7 +8,6 @@ const Auth = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,10 +29,6 @@ const Auth = () => {
     try {
       if (username && password) {
         await signup(username, password);
-        setIsLogin(true);
-        setSuccessMessage(
-          "Sign up successful! Please log in with your new credentials."
-        );
       } else {
         setError("Username and password are required");
       }
@@ -44,19 +40,20 @@ const Auth = () => {
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
     setError(""); // Clear previous errors when toggling mode
-    setSuccessMessage(""); // Clear success message when toggling mode
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="bg-brown-200 p-8 rounded-lg shadow-lg border-4 border-brown-400 w-full max-w-md pixel-font">
-        <h2 className="text-2xl mb-4 text-center text-brown-800">
-          {isLogin ? "Login" : "Sign Up"}
-        </h2>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="bg-brown-200 p-8 rounded-lg shadow-lg w-full max-w-md pixel-font relative">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl text-center text-brown-800">
+            {isLogin ? "Login" : "Sign Up"}
+          </h2>
+          <div className="absolute top-4 right-4">
+            <MusicToggle noBorder />
+          </div>
+        </div>
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        {successMessage && (
-          <p className="text-green-500 mb-4 text-center">{successMessage}</p>
-        )}
         <form onSubmit={isLogin ? handleLogin : handleSignup}>
           <div className="mb-4">
             <label
@@ -99,6 +96,7 @@ const Auth = () => {
             >
               {isLogin ? "Login" : "Sign Up"}
             </button>
+
             <button
               type="button"
               className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 focus:outline-none focus:shadow-outline"

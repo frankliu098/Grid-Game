@@ -32,7 +32,7 @@ This is a React-based game where players hover over cards to change their color 
 1. **Clone the repository**:
     ```bash
     git clone https://github.com/frankliu098/Grid-Game.git
-    cd react-hover-bomb-game
+    cd Grid-Game
     ```
 
 2. **Install dependencies**:

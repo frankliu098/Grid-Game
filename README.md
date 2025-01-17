@@ -1,5 +1,7 @@
 # React Hover Bomb Game
 
+![React Hover Bomb Game](./assets/game.png)
+
 This is a React-based game where players hover over cards to change their color while avoiding bomb cards. The game includes different difficulty levels and tracks the time taken to complete the game.
 
 ## Features
@@ -30,39 +32,43 @@ This is a React-based game where players hover over cards to change their color 
 ### Frontend
 
 1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/frankliu098/Grid-Game.git
-    cd Grid-Game
-    ```
+
+   ```bash
+   git clone https://github.com/frankliu098/Grid-Game.git
+   cd Grid-Game
+   ```
 
 2. **Install dependencies**:
-    ```bash
-    npm install
-    ```
+
+   ```bash
+   npm install
+   ```
 
 3. **Start the development server**:
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the game in your browser.
 
 ### Backend
 
 1. **Navigate to the `server` directory**:
-    ```bash
-    cd server
-    ```
+
+   ```bash
+   cd server
+   ```
 
 2. **Install dependencies**:
-    ```bash
-    npm install
-    ```
+
+   ```bash
+   npm install
+   ```
 
 3. **Start the backend server**:
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
 ## Contributing
 
